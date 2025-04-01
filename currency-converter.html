@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert currencies from GCC countries (Saudi Arabia, UAE, Kuwait, Qatar, Bahrain, Oman) to any country in the world with live exchange rates">
+    <meta name="keywords" content="GCC currency converter, Saudi Riyal converter, UAE Dirham converter, Kuwaiti Dinar converter, Qatari Riyal converter, Bahraini Dinar converter, Omani Rial converter">
+    <title>GCC to Global Currency Converter | Real-Time Exchange Rates</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border-radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #2563eb, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .converter-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .converter-box {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .converter-box h2 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .currency-selectors {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .select-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .select-wrapper label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .select-wrapper select {
+            width: 100%;
+            padding: 15px 45px 15px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .select-wrapper select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .swap-btn {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            margin-top: 28px;
+            transition: var(--transition);
+        }
+
+        .swap-btn:hover {
+            background: var(--primary-dark);
+            transform: rotate(180deg);
+        }
+
+        .result-section {
+            margin-top: 25px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: var(--border-radius);
+        }
+
+        .rate-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .converted-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .convert-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .popular-currencies {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .currencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .currency-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .currency-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .currency-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .currency-flag {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .currency-name {
+            font-weight: 600;
+        }
+
+        .currency-rate {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .currency-change {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .up {
+            color: var(--success);
+        }
+
+        .down {
+            color: var(--danger);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #cbd5e1;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: var(--shadow);
+                transform: translateY(-150%);
+                transition: var(--transition);
+                z-index: 99;
+            }
+
+            nav.active {
+                transform: translateY(0);
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .currency-selectors {
+                flex-direction: column;
+            }
+
+            .swap-btn {
+                margin: 0;
+                transform: rotate(90deg);
+            }
+
+            .swap-btn:hover {
+                transform: rotate(270deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://flagcdn.com/w160/sa.png" alt="GCC Logo" id="gcc-logo">
+                    <span class="logo-text">GCC Currency Converter</span>
+                </div>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#" class="active"><i class="fas fa-exchange-alt"></i> Converter</a></li>
+                        <li><a href="#"><i class="fas fa-chart-line"></i> Rates</a></li>
+                        <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>GCC to Global Currency Converter</h1>
+                <p>Convert between Gulf Cooperation Council currencies and all world currencies with real-time exchange rates</p>
+            </section>
+
+            <div class="converter-container">
+                <div class="converter-box">
+                    <h2><i class="fas fa-flag"></i> From GCC Currency</h2>
+                    <div class="input-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" value="1" min="0" step="0.01">
+                    </div>
+                    <div class="select-wrapper">
+                        <label for="from-currency">Select GCC Currency</label>
+                        <select id="from-currency">
+                            <option value="SAR" data-flag="sa">Saudi Riyal (SAR)</option>
+                            <option value="AED" data-flag="ae">UAE Dirham (AED)</option>
+                            <option value="KWD" data-flag="kw">Kuwaiti Dinar (KWD)</option>
+                            <option value="QAR" data-flag="qa">Qatari Riyal (QAR)</option>
+                            <option value="BHD" data-flag="bh">Bahraini Dinar (BHD)</option>
+                            <option value="OMR" data-flag="om">Omani Rial (OMR)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="converter-box">
+                    <h2><i class="fas fa-globe"></i> To Global Currency</h2>
+                    <div class="select-wrapper">
+                        <label for="to-currency">Select Target Currency</label>
+                        <select id="to-currency">
+                            <!-- Major currencies first -->
+                            <option value="USD" data-flag="us">US Dollar (USD)</option>
+                            <option value="EUR" data-flag="eu">Euro (EUR)</option>
+                            <option value="GBP" data-flag="gb">British Pound (GBP)</option>
+                            <option value="JPY" data-flag="jp">Japanese Yen (JPY)</option>
+                            <option value="CAD" data-flag="ca">Canadian Dollar (CAD)</option>
+                            <option value="AUD" data-flag="au">Australian Dollar (AUD)</option>
+                            <option value="CNY" data-flag="cn">Chinese Yuan (CNY)</option>
+                            <option value="INR" data-flag="in">Indian Rupee (INR)</option>
+                            <option value="PKR" data-flag="pk">Pakistani Rupee (PKR)</option>
+                            <option value="EGP" data-flag="eg">Egyptian Pound (EGP)</option>
+                            <option value="TRY" data-flag="tr">Turkish Lira (TRY)</option>
+                            <option value="ZAR" data-flag="za">South African Rand (ZAR)</option>
+                            <option value="BRL" data-flag="br">Brazilian Real (BRL)</option>
+                            <option value="MXN" data-flag="mx">Mexican Peso (MXN)</option>
+                            <!-- More currencies would be added here in a production environment -->
+                        </select>
+                    </div>
+                    <div class="currency-selectors">
+                        <button id="swap-currencies" class="swap-btn">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                    </div>
+                    <div class="result-section">
+                        <div class="rate-info">
+                            <span id="exchange-rate">1 SAR = 0.27 USD</span>
+                            <span id="last-updated"><i class="fas fa-sync-alt"></i> Updated just now</span>
+                        </div>
+                        <div class="converted-amount">
+                            <span id="converted-value">0.27</span>
+                            <span id="target-currency">USD</span>
+                        </div>
+                        <button id="convert-btn" class="convert-btn">
+                            <i class="fas fa-calculator"></i> Convert Currency
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="popular-currencies">
+                <h2 class="section-title">Popular GCC Exchange Rates</h2>
+                <div class="currencies-grid">
+                    <div class="currency-card">
+                        <div class="currency-header">
+                            <img src="https://flagcdn.com/w40/sa.png" alt="Saudi Flag" class="currency-flag">
+                            <span class="currency-name">Saudi Riyal (SAR)</span>
+                        </div>
+                        <div class="currency-rate">1 SAR = 0.27 USD</div>
+                        <div class="currency-change up">
+                            <i class="fas fa-caret-up"></i> 0.12% today
+                        </div>
+                    </div>
+                    <div class="currency-card">
+                        <div class="currency-header">
+                            <img src="https://flagcdn.com/w40/ae.png" alt="UAE Flag" class="currency-flag">
+                            <span class="currency-name">UAE Dirham (AED)</span>
+                        </div>
+                        <div class="currency-rate">1 AED = 0.27 USD</div>
+                        <div class="currency-change up">
+                            <i class="fas fa-caret-up"></i> 0.08% today
+                        </div>
+                    </div>
+                    <div class="currency-card">
+                        <div class="currency-header">
+                            <img src="https://flagcdn.com/w40/kw.png" alt="Kuwait Flag" class="currency-flag">
+                            <span class="currency-name">Kuwaiti Dinar (KWD)</span>
+                        </div>
+                        <div class="currency-rate">1 KWD = 3.25 USD</div>
+                        <div class="currency-change down">
+                            <i class="fas fa-caret-down"></i> 0.05% today
+                        </div>
+                    </div>
+                    <div class="currency-card">
+                        <div class="currency-header">
+                            <img src="https://flagcdn.com/w40/qa.png" alt="Qatar Flag" class="currency-flag">
+                            <span class="currency-name">Qatari Riyal (QAR)</span>
+                        </div>
+                        <div class="currency-rate">1 QAR = 0.27 USD</div>
+                        <div class="currency-change up">
+                            <i class="fas fa-caret-up"></i> 0.10% today
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>GCC Currencies</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> Saudi Riyal (SAR)</a></li>
+                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> UAE Dirham (AED)</a></li>
+                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> Kuwaiti Dinar (KWD)</a></li>
+                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> Qatari Riyal (QAR)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Popular Conversions</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> SAR to USD</a></li>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> AED to EUR</a></li>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> KWD to GBP</a></li>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> QAR to INR</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chart-line"></i> Historical Rates</a></li>
+                        <li><a href="#"><i class="fas fa-bell"></i> Rate Alerts</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Currency Guide</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 GCC Currency Converter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mainNav = document.getElementById('main-nav');
+
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+                this.innerHTML = mainNav.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+
+            // Currency Converter Functionality
+            const amountInput = document.getElementById('amount');
+            const fromCurrencySelect = document.getElementById('from-currency');
+            const toCurrencySelect = document.getElementById('to-currency');
+            const swapBtn = document.getElementById('swap-currencies');
+            const convertBtn = document.getElementById('convert-btn');
+            const exchangeRateSpan = document.getElementById('exchange-rate');
+            const lastUpdatedSpan = document.getElementById('last-updated');
+            const convertedValueSpan = document.getElementById('converted-value');
+            const targetCurrencySpan = document.getElementById('target-currency');
+            const gccLogo = document.getElementById('gcc-logo');
+
+            // Mock exchange rates (in production, use a real API)
+            const exchangeRates = {
+                // GCC Currencies
+                SAR: { USD: 0.27, EUR: 0.25, GBP: 0.21, JPY: 39.5, INR: 22.1, AED: 0.98, KWD: 0.082, QAR: 0.98, BHD: 0.10, OMR: 0.10 },
+                AED: { USD: 0.27, EUR: 0.25, GBP: 0.21, JPY: 39.5, INR: 22.1, SAR: 1.02, KWD: 0.084, QAR: 1.00, BHD: 0.10, OMR: 0.10 },
+                KWD: { USD: 3.25, EUR: 3.02, GBP: 2.56, JPY: 482.5, INR: 269.8, SAR: 12.20, AED: 11.94, QAR: 11.94, BHD: 1.23, OMR: 1.25 },
+                QAR: { USD: 0.27, EUR: 0.25, GBP: 0.21, JPY: 39.5, INR: 22.1, SAR: 1.02, AED: 1.00, KWD: 0.084, BHD: 0.10, OMR: 0.10 },
+                BHD: { USD: 2.65, EUR: 2.46, GBP: 2.09, JPY: 393.5, INR: 220.0, SAR: 9.95, AED: 9.74, KWD: 0.81, QAR: 9.74, OMR: 1.02 },
+                OMR: { USD: 2.60, EUR: 2.41, GBP: 2.05, JPY: 386.0, INR: 215.8, SAR: 9.76, AED: 9.55, KWD: 0.80, QAR: 9.55, BHD: 0.98 },
+                
+                // Other major currencies (sample)
+                USD: { SAR: 3.75, AED: 3.67, KWD: 0.31, QAR: 3.64, BHD: 0.38, OMR: 0.38 },
+                EUR: { SAR: 4.02, AED: 3.93, KWD: 0.33, QAR: 3.91, BHD: 0.41, OMR: 0.41 },
+                GBP: { SAR: 4.73, AED: 4.63, KWD: 0.39, QAR: 4.60, BHD: 0.48, OMR: 0.49 },
+                JPY: { SAR: 0.025, AED: 0.025, KWD: 0.0021, QAR: 0.025, BHD: 0.0025, OMR: 0.0026 },
+                INR: { SAR: 0.045, AED: 0.044, KWD: 0.0037, QAR: 0.044, BHD: 0.0045, OMR: 0.0046 }
+            };
+
+            // Update GCC logo based on selected currency
+            fromCurrencySelect.addEventListener('change', function() {
+                const selectedOption = fromCurrencySelect.options[fromCurrencySelect.selectedIndex];
+                const countryCode = selectedOption.getAttribute('data-flag');
+                gccLogo.src = `https://flagcdn.com/w160/${countryCode}.png`;
+                gccLogo.alt = `${selectedOption.text} Flag`;
+                updateConversion();
+            });
+
+            // Update conversion
+            function updateConversion() {
+                const fromCurrency = fromCurrencySelect.value;
+                const toCurrency = toCurrencySelect.value;
+                const amount = parseFloat(amountInput.value) || 1;
+                
+                // Get exchange rate
+                const rate = exchangeRates[fromCurrency][toCurrency];
+                const convertedAmount = (amount * rate).toFixed(2);
+                
+                // Update UI
+                exchangeRateSpan.textContent = `1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`;
+                convertedValueSpan.textContent = convertedAmount;
+                targetCurrencySpan.textContent = toCurrency;
+                lastUpdatedSpan.innerHTML = `<i class="fas fa-sync-alt"></i> Updated: ${new Date().toLocaleTimeString()}`;
+            }
+
+            // Swap currencies
+            swapBtn.addEventListener('click', function() {
+                const temp = fromCurrencySelect.value;
+                fromCurrencySelect.value = toCurrencySelect.value;
+                toCurrencySelect.value = temp;
+                updateConversion();
+            });
+
+            // Convert button click
+            convertBtn.addEventListener('click', updateConversion);
+
+            // Input changes
+            amountInput.addEventListener('input', updateConversion);
+            fromCurrencySelect.addEventListener('change', updateConversion);
+            toCurrencySelect.addEventListener('change', updateConversion);
+
+            // Initial conversion
+            updateConversion();
+
+            // Auto-refresh every 60 seconds
+            setInterval(updateConversion, 60000);
+
+            // For production, replace with real API call:
+            /*
+            async function fetchExchangeRates() {
+                const fromCurrency = fromCurrencySelect.value;
+                const toCurrency = toCurrencySelect.value;
+                
+                try {
+                    const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
+                    const data = await response.json();
+                    
+                    if (data && data.rates) {
+                        const rate = data.rates[toCurrency];
+                        const amount = parseFloat(amountInput.value) || 1;
+                        const convertedAmount = (amount * rate).toFixed(2);
+                        
+                        exchangeRateSpan.textContent = `1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`;
+                        convertedValueSpan.textContent = convertedAmount;
+                        targetCurrencySpan.textContent = toCurrency;
+                        lastUpdatedSpan.innerHTML = `<i class="fas fa-sync-alt"></i> Updated: ${new Date().toLocaleTimeString()}`;
+                    }
+                } catch (error) {
+                    console.error("Error fetching rates:", error);
+                    exchangeRateSpan.textContent = "Failed to load rates";
+                }
+            }
+            */
+        });
+    </script>
+</body>
+</html>
